@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify
-import psycopg2
+import psycopg
 import os
 
 app = Flask(__name__)
 
-# Подключение к БД - используем DATABASE_URL напрямую
+# Подключение к БД
 DATABASE_URL = os.environ.get('DATABASE_URL')
 conn = None
 
 if DATABASE_URL:
     try:
-        # Используем DATABASE_URL напрямую
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        # Используем psycopg3
+        conn = psycopg.connect(DATABASE_URL)
         print("✅ Database connected successfully")
         
         # Создание таблицы
@@ -28,6 +28,8 @@ if DATABASE_URL:
     except Exception as e:
         print(f"❌ Database connection failed: {e}")
         conn = None
+else:
+    print("❌ DATABASE_URL not found")
 
 @app.route('/')
 def hello():
